@@ -18,11 +18,9 @@ runs:
 
     - name: Get the PyGithub module
       run: pip install PyGithub
-      shell: bash
 
     - name: Add Milestone to the PR (if needed)
       run: ${{ github.action_path }}/github-milestoner.py
-      shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
         PR_NUM: ${{ github.event.number }}

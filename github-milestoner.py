@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 """
-
-The script applies a milestone based off the MAJOR.MINOR.X version of the
-base branch, if a milestone is not already applied. This way, a human-applied
+The script applies a milestone based off the MAJOR.MINOR version of the base
+branch, if a milestone is not already applied. This way, a human-applied
 milestone gets priority.
 
 """
@@ -33,15 +32,18 @@ if (GITHUB_BASE_REF is None or
 
 # Given a pullRequest and repo object, the function checks if a milestone has
 # already been applied to the PR. If it has, exit successfully. If it hasn't,
-# apply the milestone based on the MAJOR.MINOR.x version of the base branch with
+# apply the milestone based on the MAJOR.MINOR version of the base branch with
 # the closest deadline.
 def ensureMilestones(pullRequest, repo):
     if pullRequest.milestone is not None:
-        print(f"Milestone {pullRequest.milestone.title} already applied.")
+        print(f"Milestone {pullRequest.milestone.title} already applied")
         return None
-    else:
-        print(f"No milestone on the PR")
-    targetVersion = re.search(r"v\d+.\d+.", GITHUB_BASE_REF).group(0)
+    print("No milestone on the PR")
+    targetVersion = re.search(r"v\d+\.\d+\.", GITHUB_BASE_REF)
+    if targetVersion is None:
+        print(f"No matching milestone for '{GITHUB_BASE_REF}'")
+        return None
+    targetVersion = targetVersion.group[0]
     for milestone in repo.get_milestones(state="open"):
         if milestone.title.startswith(targetVersion):
             print(f"Setting milestone to '{milestone.title}'")
