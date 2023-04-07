@@ -43,7 +43,7 @@ def ensureMilestones(pullRequest, repo):
     if targetVersion is None:
         print(f"No matching milestone for '{GITHUB_BASE_REF}'")
         return None
-    targetVersion = targetVersion.group[0]
+    targetVersion = targetVersion.group(0)
     for milestone in repo.get_milestones(state="open"):
         if milestone.title.startswith(targetVersion):
             print(f"Setting milestone to '{milestone.title}'")
